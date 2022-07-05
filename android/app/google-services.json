@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "704911555426",
+    "project_id": "kishore-electrical",
+    "storage_bucket": "kishore-electrical.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:704911555426:android:cdf5f3c39ca1cc9a2c0a3b",
+        "android_client_info": {
+          "package_name": "com.hdmdmi.kem"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "704911555426-i5lkl577srl9uk139o2q3d1mlhs2f4ov.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDyyH194BnlRlA6jSVI502S994BC0UWRRE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "704911555426-i5lkl577srl9uk139o2q3d1mlhs2f4ov.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
