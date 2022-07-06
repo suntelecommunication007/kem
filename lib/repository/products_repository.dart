@@ -3,16 +3,17 @@ import 'package:kem/model/product.dart';
 
 class ProductsReposiotry {
   final db = FirebaseFirestore.instance;
-  Stream<QuerySnapshot<Map<String, dynamic>>> getAllProducts() {
-    return db.collection('products').limit(15).snapshots();
+  Stream<QuerySnapshot<Map<String, dynamic>>> getAllProducts(int limit) {
+    return db.collection('products').orderBy('name').limit(limit).snapshots();
   }
 
   Stream<QuerySnapshot<Map<String, dynamic>>> getMoreAllProducts(
-      DocumentSnapshot product) {
+      DocumentSnapshot product, int limit) {
     return db
         .collection('products')
+        .orderBy('name')
         .startAfterDocument(product)
-        .limit(15)
+        .limit(limit)
         .snapshots();
   }
 
@@ -21,21 +22,14 @@ class ProductsReposiotry {
     return await db.collection('products').doc(product.id).get();
   }
 
-  Stream<QuerySnapshot<Map<String, dynamic>>> getProductsByCategory(
-      String category) {
+  getMoreProductsByCategory(
+      String category, DocumentSnapshot product, int limit) async {
     return db
         .collection('products')
         .where('category', isEqualTo: category)
-        .limit(15)
-        .snapshots();
-  }
-
-  getMoreProductsByCategory(String category, DocumentSnapshot product) async {
-    return db
-        .collection('products')
-        .where('category', isEqualTo: category)
+        .orderBy('name')
         .startAfterDocument(product)
-        .limit(15)
+        .limit(limit)
         .snapshots();
   }
 }

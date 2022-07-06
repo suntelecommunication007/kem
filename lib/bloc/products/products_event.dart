@@ -12,10 +12,17 @@ class LoadProducts extends ProductsEvent {
 }
 
 class LoadMoreProducts extends ProductsEvent {
-  final String category;
   final int loadedProductsCount;
-
-  const LoadMoreProducts({required this.category,required this.loadedProductsCount});
+  const LoadMoreProducts({required this.loadedProductsCount});
   @override
-  List<Object> get props => [category,loadedProductsCount];
+  List<Object> get props => [loadedProductsCount];
+}
+
+class CategorySelectedEvent extends ProductsEvent {
+  final String category;
+
+  const CategorySelectedEvent(this.category);
+
+  @override
+  List<Object?> get props => [category];
 }

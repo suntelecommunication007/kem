@@ -2,6 +2,7 @@ import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:kem/bloc/category/category_bloc.dart';
 import 'package:kem/screen/auth_gate.dart';
 
 import '../bloc/products/products_bloc.dart';
@@ -48,6 +49,9 @@ class _MyAppState extends State<MyApp> {
           BlocProvider(
             create: (context) => ProductsBloc(),
           ),
+          BlocProvider(
+            create: (context) => CategoryBloc(),
+          )
         ],
         child: Scaffold(
           extendBody: true,
