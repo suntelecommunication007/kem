@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
 import 'package:flutterfire_ui/auth.dart';
 import 'package:kem/main.dart';
+import 'package:kem/screen/Product_detail_screen.dart';
 
 class AuthGate extends StatelessWidget {
   const AuthGate({Key? key}) : super(key: key);
@@ -10,6 +11,7 @@ class AuthGate extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      theme: ThemeData(useMaterial3: true),
       home: Scaffold(
         body: StreamBuilder(
           stream: FirebaseAuth.instance.authStateChanges(),
@@ -44,6 +46,9 @@ class AuthGate extends StatelessWidget {
           },
         ),
       ),
+      routes: {
+        ProductDetailScreen.routeName: (context) => const ProductDetailScreen()
+      },
     );
   }
 }

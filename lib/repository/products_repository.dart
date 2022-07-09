@@ -22,14 +22,25 @@ class ProductsReposiotry {
     return await db.collection('products').doc(product.id).get();
   }
 
-  getMoreProductsByCategory(
-      String category, DocumentSnapshot product, int limit) async {
-    return db
-        .collection('products')
-        .where('category', isEqualTo: category)
-        .orderBy('name')
-        .startAfterDocument(product)
-        .limit(limit)
-        .snapshots();
+  Stream<QuerySnapshot<Map<String, dynamic>>> getMoreProductsByCategory(
+      {required String category,
+      DocumentSnapshot? product,
+      required int limit}) {
+    if (product != null) {
+      return db
+          .collection('products')
+          .where('category', isEqualTo: category)
+          .orderBy('name')
+          .startAfterDocument(product)
+          .limit(limit)
+          .snapshots();
+    } else {
+      return db
+          .collection('products')
+          .where('category', isEqualTo: category)
+          .orderBy('name')
+          .limit(limit)
+          .snapshots();
+    }
   }
 }

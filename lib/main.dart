@@ -42,28 +42,25 @@ class _MyAppState extends State<MyApp> {
   ];
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: MultiBlocProvider(
-        providers: [
-          BlocProvider(
-            create: (context) => ProductsBloc(),
-          ),
-          BlocProvider(
-            create: (context) => CategoryBloc(),
-          )
-        ],
-        child: Scaffold(
-          extendBody: true,
-          body: _screen[_selectedIndex],
-          bottomNavigationBar: CurvedNavigationBar(
-            backgroundColor: Colors.black,
-            items: _items,
-            index: _selectedIndex,
-            onTap: (count) => setState(() {
-              _selectedIndex = count;
-            }),
-          ),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (context) => ProductsBloc(),
+        ),
+        BlocProvider(
+          create: (context) => CategoryBloc(),
+        )
+      ],
+      child: Scaffold(
+        extendBody: true,
+        body: _screen[_selectedIndex],
+        bottomNavigationBar: CurvedNavigationBar(
+          backgroundColor: Colors.black,
+          items: _items,
+          index: _selectedIndex,
+          onTap: (count) => setState(() {
+            _selectedIndex = count;
+          }),
         ),
       ),
     );

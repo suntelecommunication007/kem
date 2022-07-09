@@ -69,17 +69,23 @@ class Product {
   factory Product.fromFireBase(
       String firebaseDocumentId, Map<String, dynamic> map) {
     return Product(
-      id: firebaseDocumentId,
-      name: map['name'] as String,
-      barcode: map['barcode'] as String,
-      category: map['category'] as String,
-      imageUrl: map['imageUrl'] as String,
-      description: map['description'] as String,
-      priceConfig: Map<String, double>.from(
-        (map['priceConfig']),
-      ),
-    );
+        id: firebaseDocumentId,
+        name: map['name'] as String,
+        barcode: map['barcode'] as String,
+        category: map['category'] as String,
+        imageUrl: map['imageUrl'] as String,
+        description: map['description'] as String,
+        priceConfig: getPriceConfig(map['priceConfig']));
   }
+
+  static Map<String, double> getPriceConfig(Map<String, dynamic> map) {
+    Map<String, double> result = {};
+    map.forEach((key, value) {
+      result.putIfAbsent(key, () => double.parse(value.toString()));
+    });
+    return result;
+  }
+
   String toJson() => json.encode(toMap());
 
   factory Product.fromJson(String source) =>

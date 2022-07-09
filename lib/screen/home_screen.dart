@@ -7,6 +7,8 @@ import 'package:kem/model/product.dart';
 import 'package:kem/widgets/offers_widget.dart';
 import 'package:kem/widgets/search_widget.dart';
 
+import '../widgets/product_item.dart';
+
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
 
@@ -17,9 +19,18 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   final TextEditingController _searchController = TextEditingController();
   final ScrollController _scrollController = ScrollController();
+  List<Category> categoryList = [];
+  //category list index
+  int _category = 0;
 
   @override
   void initState() {
+    ProductsBloc productsBloc =
+        BlocProvider.of<ProductsBloc>(context, listen: false);
+    CategoryBloc categoryBloc =
+        BlocProvider.of<CategoryBloc>(context, listen: false);
+    categoryBloc.add(const LoadCategoryEvent());
+    productsBloc.add(const LoadProducts('All'));
     _scrollController.addListener(() {
       final maxScroll = _scrollController
           .position.maxScrollExtent; //get the maximum scroll length
@@ -28,6 +39,7 @@ class _HomeScreenState extends State<HomeScreen> {
       const delta = 200; // extra value our whish
 
       if (maxScroll < currentScroll + delta) {
+        print('Max Scroll');
         _addMore();
       }
     });
@@ -35,24 +47,18 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   void _addMore() {
-    final products = BlocProvider.of<ProductsBloc>(context);
+    final products = BlocProvider.of<ProductsBloc>(context, listen: false);
     if (products.state is! NoMoreProducts) {
-      if (products.state is ProductsLoadedState) {
-        products.add(LoadMoreProducts(
-            loadedProductsCount: products.productsList.length - 1));
+      if (products.state is ProductsLoadedState ||
+          products.state is FilterProductsLoadedState) {
+        print('Called LoadMoreProducts');
+        products.add(LoadMoreProducts());
       }
     }
   }
 
-  int _category = 0;
   @override
   Widget build(BuildContext context) {
-    ProductsBloc productsBloc =
-        BlocProvider.of<ProductsBloc>(context, listen: false);
-    CategoryBloc categoryBloc =
-        BlocProvider.of<CategoryBloc>(context, listen: false);
-    categoryBloc.add(const LoadCategoryEvent());
-    productsBloc.add(const LoadProducts('All'));
     return SafeArea(
       child: BlocListener<ProductsBloc, ProductsState>(
         listener: (context, state) {
@@ -86,8 +92,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 BlocBuilder<CategoryBloc, CategoryState>(
                   builder: (context, state) {
                     if (state is CategoryLoaded) {
-                      return categoryBuilder(
-                          context, state.categoryList, productsBloc);
+                      return categoryBuilder(context, state.categoryList);
                     } else {
                       return Container();
                     }
@@ -100,11 +105,14 @@ class _HomeScreenState extends State<HomeScreen> {
                 if (state is ProductsLoadingErrorState) {
                   return Container();
                 } else if (state is ProductsLoadedState) {
+                  print(state.toString());
                   return productsBuilder(context, state.productsList);
                 } else if (state is LoadingMoreProducts) {
                   return productsBuilder(context, state.productsList);
                 } else if (state is NoMoreProducts) {
                   return productsBuilder(context, state.productsList);
+                } else if (state is FilterProductsLoadedState) {
+                  return productsBuilder(context, state.filteProductsList);
                 } else {
                   return productsBuilder(context, []);
                 }
@@ -124,23 +132,17 @@ class _HomeScreenState extends State<HomeScreen> {
         childCount: productsList.length,
         (context, index) {
           final product = productsList[index];
-          return Container(
-            decoration: BoxDecoration(borderRadius: BorderRadius.circular(10)),
-            margin: const EdgeInsets.all(10),
-            child: GridTile(
-                footer: GridTileBar(
-                    title: Text(product.category),
-                    backgroundColor: Colors.black),
-                child: Image.network(
-                    'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8M3x8cHJvZHVjdHxlbnwwfHwwfHw%3D&w=1000&q=80')),
-          );
+          return ProductItem(product: product);
         },
       ),
     );
   }
 
-  Widget categoryBuilder(BuildContext context, List<Category> categoryList,
-      ProductsBloc productsBloc) {
+  Widget categoryBuilder(
+    BuildContext context,
+    List<Category> categoryList,
+  ) {
+    final productsBloc = BlocProvider.of<ProductsBloc>(context);
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: SizedBox(
@@ -157,7 +159,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   _category = index;
                 }),
                 child: Container(
-                  width: MediaQuery.of(context).size.width * 0.1,
+                  width: MediaQuery.of(context).size.width * 0.5,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(10),
                     color: _category == index

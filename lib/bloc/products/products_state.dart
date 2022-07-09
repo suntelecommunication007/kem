@@ -37,3 +37,10 @@ class ProductsLoadingErrorState extends ProductsState {
   @override
   List<Object?> get props => throw UnimplementedError();
 }
+
+class FilterProductsLoadedState extends ProductsState {
+  final List<Product> filteProductsList;
+  const FilterProductsLoadedState({required this.filteProductsList});
+  @override
+  List<Object?> get props => [filteProductsList];
+}
