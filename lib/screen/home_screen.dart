@@ -4,6 +4,7 @@ import 'package:kem/bloc/category/category_bloc.dart';
 import 'package:kem/bloc/products/products_bloc.dart';
 import 'package:kem/model/category.dart';
 import 'package:kem/model/product.dart';
+import 'package:kem/widgets/cart_icon.dart';
 import 'package:kem/widgets/offers_widget.dart';
 import 'package:kem/widgets/search_widget.dart';
 
@@ -39,7 +40,6 @@ class _HomeScreenState extends State<HomeScreen> {
       const delta = 200; // extra value our whish
 
       if (maxScroll < currentScroll + delta) {
-        print('Max Scroll');
         _addMore();
       }
     });
@@ -51,7 +51,6 @@ class _HomeScreenState extends State<HomeScreen> {
     if (products.state is! NoMoreProducts) {
       if (products.state is ProductsLoadedState ||
           products.state is FilterProductsLoadedState) {
-        print('Called LoadMoreProducts');
         products.add(LoadMoreProducts());
       }
     }
@@ -102,10 +101,12 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             BlocBuilder<ProductsBloc, ProductsState>(
               builder: (context, state) {
+                print(state);
                 if (state is ProductsLoadingErrorState) {
-                  return Container();
+                  return Container(
+                    child: Text('Error'),
+                  );
                 } else if (state is ProductsLoadedState) {
-                  print(state.toString());
                   return productsBuilder(context, state.productsList);
                 } else if (state is LoadingMoreProducts) {
                   return productsBuilder(context, state.productsList);
@@ -210,11 +211,10 @@ class _HomeScreenState extends State<HomeScreen> {
             )),
             Container(
               margin: const EdgeInsets.all(10),
-              padding: const EdgeInsets.all(10),
               decoration: BoxDecoration(
                   color: Colors.grey.shade200,
                   borderRadius: BorderRadius.circular(10)),
-              child: const Icon(Icons.shopping_bag),
+              child: IconButton(onPressed: () {}, icon: CartIcon()),
             )
           ],
         ),

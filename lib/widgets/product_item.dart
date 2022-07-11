@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:kem/bloc/products/products_bloc.dart';
 
 import '../model/product.dart';
 import '../screen/Product_detail_screen.dart';
@@ -13,10 +15,11 @@ class ProductItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var routeName;
     return GestureDetector(
-      onTap: (() => Navigator.of(context)
-          .pushNamed(ProductDetailScreen.routeName, arguments: product)),
+      onTap: () {
+        Navigator.of(context)
+            .pushNamed(ProductDetailScreen.routeName, arguments: product);
+      },
       child: Container(
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(10),

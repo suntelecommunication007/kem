@@ -18,7 +18,7 @@ class ProductsBloc extends Bloc<ProductsEvent, ProductsState> {
   final int _limit = PlatformDetails().isBiggerScreen ? 30 : 15;
   bool _isFetchingProducts = false;
   bool _hasNext = true;
-
+  Product? _selectedProductForDetailsScreen;
   bool get _isAll => (_selectedCategory.category == 'All');
 
   ProductsBloc() : super(ProductsLoadingState()) {
@@ -165,21 +165,5 @@ class ProductsBloc extends Bloc<ProductsEvent, ProductsState> {
         }
       },
     );
-  }
-  categorySelectedEvent(CategorySelectedEvent event, emit) async {
-    // final lastProduct =
-    //     await _reposiotry.getProductDocumentSnapshot(newList.last);
-    // final newFirebaseList = await _reposiotry
-    //     .getMoreProductsByCategory(event.category, lastProduct, _limit)
-    //     .map((snapshot) => snapshot.docs
-    //         .map((e) {
-    //           return Product.fromFireBase(e.id, e.data());
-    //         })
-    //         .toSet()
-    //         .toList())
-    //     .first;
-
-    // newList.toSet().addAll(newFirebaseList);
-    // emit(ProductsLoadedState(productsList: newList));
   }
 }
